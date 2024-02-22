@@ -1,10 +1,10 @@
 import Layout from "../../Components/Layout/Layout";
-import classes from "./Home.module.css";
+import HeroSection from "../HeroSection/HeroSection";
 
 const Home = () => {
   return (
     <Layout>
-      <div className={classes.container}></div>
+      <HeroSection />
     </Layout>
   );
 };

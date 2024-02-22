@@ -23,9 +23,9 @@
 }
 
 .secondary {
-  border: 1px solid #fff;
   color: #fff;
   background: #ffffff1a;
+  border: none;
 }
 
 .tertiary {

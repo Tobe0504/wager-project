@@ -1,6 +1,5 @@
 .container {
-  border: 2px solid red;
-  height: 70px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,7 +7,6 @@
 }
 
 .container > div:nth-child(1) {
-  border: 2px solid red;
   width: 384px;
 }
 
