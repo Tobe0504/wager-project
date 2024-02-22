@@ -1,12 +1,15 @@
 import Layout from "../../Components/Layout/Layout";
 import HeroSection from "../HeroSection/HeroSection";
 import WagerList from "../WagerList/WagerList";
+import classes from "./Home.module.css";
 
 const Home = () => {
   return (
     <Layout>
-      <HeroSection />
-      <WagerList />
+      <div className={classes.container}>
+        <HeroSection />
+        <WagerList />
+      </div>
     </Layout>
   );
 };

@@ -1,8 +1,12 @@
-import Layout from "./Components/Layout/Layout";
+import { Route, Routes } from "react-router-dom";
 import Home from "./Containers/Home/Home";
 
 function App() {
-  return <Home />;
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+    </Routes>
+  );
 }
 
 export default App;
