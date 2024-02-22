@@ -1,0 +1,15 @@
+.container {
+  min-height: 100vh;
+  position: relative;
+}
+
+.header {
+  height: 70px;
+  position: sticky;
+  top: 0;
+}
+
+.body {
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+}

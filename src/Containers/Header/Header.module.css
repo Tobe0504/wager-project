@@ -1,0 +1,17 @@
+.container {
+  border: 2px solid red;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 100px;
+}
+
+.container > div:nth-child(1) {
+  border: 2px solid red;
+  width: 384px;
+}
+
+.container > button:nth-child(2) {
+  width: 171px;
+}

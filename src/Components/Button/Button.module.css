@@ -1,0 +1,57 @@
+.button {
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+  width: 100%;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease-in-out;
+  padding: 10px 20px;
+}
+
+.primary {
+  background: linear-gradient(214.02deg, #b75cff 6.04%, #671ae4 92.95%);
+  border: none;
+  color: #fff;
+}
+
+.secondary {
+  border: 1px solid #fff;
+  color: #fff;
+  background: #ffffff1a;
+}
+
+.tertiary {
+  color: var(--white-body-text, #fff);
+  background: #2ba792;
+  border: none;
+}
+
+.tertiary:hover {
+  background: var(--tertiatyButtonHover);
+}
+
+.tertiary:active {
+  background: var(--tertiaryButtonActive);
+}
+
+@media screen and (min-width: 767px) and (max-width: 1023px) {
+  .button {
+    font-size: 14px;
+    line-height: 23px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .button {
+    font-size: 14px;
+    line-height: 23px;
+  }
+}
