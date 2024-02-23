@@ -11,6 +11,7 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
   gap: 10px;
+  transition: all 0.3s ease-in-out;
 }
 
 .listNav::-webkit-scrollbar {
@@ -39,6 +40,7 @@
   letter-spacing: 0em;
   text-align: left;
   background: #ffffff1a;
+  transition: all 0.3s ease-in-out;
 }
 
 .div > span {
@@ -66,17 +68,8 @@
   line-height: 30px;
   letter-spacing: 0em;
   text-align: left;
+  transition: all 0.3s ease-in-out;
   background: linear-gradient(214.02deg, #b75cff 6.04%, #671ae4 92.95%);
-}
-
-@keyframes borderEffect {
-  0% {
-    border-bottom: 2px solid #f2f3f8;
-  }
-
-  100% {
-    border-bottom: 2px solid rgb(28 37 78 / 1);
-  }
 }
 
 .activeDiv > span {

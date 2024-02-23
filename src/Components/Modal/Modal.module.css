@@ -1,0 +1,74 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 11;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  cursor: auto;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 12;
+  overflow: hidden;
+  background: #181e41;
+  /* background: linear-gradient(113.49deg, #984d38 -30.3%, #181e41 58.12%); */
+
+  margin: auto;
+  animation: appear 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+
+  max-width: 928px;
+  min-width: 458px;
+  min-height: 458px;
+  max-height: 600px;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.modal > div {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+}
+
+.footer {
+  text-align: right;
+  margin-right: 3rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .modal {
+    width: 60%;
+    height: 35vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .modal {
+    height: 375px;
+    width: 378px;
+    max-width: 378px;
+    min-width: 378px;
+    min-height: 375px;
+    max-height: 375px;
+  }
+}

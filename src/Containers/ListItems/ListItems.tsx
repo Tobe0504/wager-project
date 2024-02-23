@@ -18,7 +18,7 @@ const ListItems = () => {
             key={i}
             image={data.image}
             onClick={() => {
-              currentSearchParams.set("wager", String(i));
+              currentSearchParams.set("wager", String(data.id));
               setSearchParams(currentSearchParams.toString());
             }}
           />

@@ -9,6 +9,7 @@ export const wagerList = [
     title: "Yellow Painting",
     image: wager1,
     id: 1,
+    description: "Dollar will rise against the naira",
   },
 
   {
@@ -17,6 +18,7 @@ export const wagerList = [
     title: "Blue Painting",
     image: wager2,
     id: 2,
+    description: "Dollar will rise against the naira",
   },
 
   {
@@ -25,6 +27,7 @@ export const wagerList = [
     title: "Blue Painting",
     image: wager3,
     id: 3,
+    description: "Dollar will rise against the naira",
   },
 
   {
@@ -33,6 +36,7 @@ export const wagerList = [
     title: "Yellow Painting",
     image: wager3,
     id: 4,
+    description: "Dollar will rise against the naira",
   },
 
   {
@@ -41,6 +45,7 @@ export const wagerList = [
     title: "Blue Painting",
     image: wager1,
     id: 5,
+    description: "Dollar will rise against the naira",
   },
 
   {
@@ -49,5 +54,6 @@ export const wagerList = [
     title: "Blue Painting",
     image: wager2,
     id: 6,
+    description: "Dollar will rise against the naira",
   },
 ];

@@ -1,0 +1,59 @@
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  padding: 2rem;
+}
+
+.container > .imageSection {
+  height: 100%;
+  width: 50%;
+}
+
+.container > .imageSection > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.textSection {
+  flex: 1;
+}
+
+.textSection > div {
+  margin-bottom: 2rem;
+}
+
+.textSection > div > span {
+  display: block;
+}
+
+.textSection > div > span:nth-child(1) {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #ffffff;
+}
+
+.textSection > div > span:nth-child(2) {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-top: 0.5rem;
+  color: #ffffff80;
+}
+
+.buttonSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
