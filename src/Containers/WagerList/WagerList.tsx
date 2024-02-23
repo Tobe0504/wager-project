@@ -15,12 +15,12 @@ const WagerList = () => {
   // States
   const [navItems, setNavItems] = useState([
     {
-      title: "Wagers by you",
+      title: "Wagers for you",
       isActive: true,
     },
 
     {
-      title: "Wagers for you",
+      title: "Wagers by you",
       isActive: true,
     },
   ]);
@@ -31,7 +31,7 @@ const WagerList = () => {
   const showWagerModal = currentSearchParams.get("wager");
 
   return (
-    <section className={classes.container} ref={listItemRefs}>
+    <section className={classes.container}>
       {showWagerModal && (
         <AcceptedModal
           onClick={() => {
@@ -45,7 +45,7 @@ const WagerList = () => {
         title="Wagers"
         paragraph="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       />
-      <div className={classes.list}>
+      <div className={classes.list} ref={listItemRefs}>
         <SectionsNav navItems={navItems} setNavItems={setNavItems} isRouting />
         <ListItems />
       </div>

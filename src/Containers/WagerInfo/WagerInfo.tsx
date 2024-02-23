@@ -1,5 +1,4 @@
 import classes from "./WagerInfo.module.css";
-import wager1 from "../../Assets/Images/wager1.jpg";
 import { wagerList } from "../../Utilities/wagerList";
 import Button from "../../Components/Button/Button";
 

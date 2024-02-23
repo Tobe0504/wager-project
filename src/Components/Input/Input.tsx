@@ -16,6 +16,7 @@ type InputProps = {
   name?: string;
   condition?: boolean;
   readOnly?: boolean;
+  onFocus?: () => void;
 };
 
 const Input = ({
@@ -33,6 +34,7 @@ const Input = ({
   name,
   condition,
   readOnly,
+  onFocus,
 }: InputProps) => {
   // States
   const [invalid, setInvalid] = useState(false);
@@ -49,6 +51,7 @@ const Input = ({
       <span className={classes.input}>
         <input
           type={type || "text"}
+          onFocus={onFocus}
           name={name}
           placeholder={placeholder}
           id={label}

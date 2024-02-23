@@ -6,7 +6,7 @@ export const wagerList = [
   {
     user: "@tobe",
     currenyBid: "0.005",
-    title: "Yellow Painting",
+    title: "Dollar fight",
     image: wager1,
     id: 1,
     description: "Dollar will rise against the naira",
@@ -15,28 +15,28 @@ export const wagerList = [
   {
     user: "@nerdthejohn",
     currenyBid: "0.005",
-    title: "Blue Painting",
+    title: "Lets see",
     image: wager2,
     id: 2,
-    description: "Dollar will rise against the naira",
+    description: "The boyfriend and babe on twitter will reconcole",
   },
 
   {
     user: "@test",
     currenyBid: "0.005",
-    title: "Blue Painting",
+    title: "Jhus to Nigeria",
     image: wager3,
     id: 3,
-    description: "Dollar will rise against the naira",
+    description: "Jhus will enter Nigeria",
   },
 
   {
     user: "@tobe",
     currenyBid: "0.005",
-    title: "Yellow Painting",
+    title: "Test",
     image: wager3,
     id: 4,
-    description: "Dollar will rise against the naira",
+    description: "There woll be 414 test",
   },
 
   {

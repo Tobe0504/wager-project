@@ -26,7 +26,7 @@ const WagerCard = ({ user, title, bid, image, onClick }: WagerCardProps) => {
         </div>
       </div>
 
-      <Button onClick={onClick}> Place a bid</Button>
+      <Button onClick={onClick}> View details</Button>
     </div>
   );
 };
