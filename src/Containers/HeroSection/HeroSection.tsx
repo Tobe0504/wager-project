@@ -24,9 +24,11 @@ const containerVaraiants = {
 const imageContainerVariants = {
   hidden: {
     opacity: 0,
+    x: 0,
   },
   visible: {
     opacity: 1,
+    y: 20,
     transition: {
       delay: 2,
       type: "spring",
