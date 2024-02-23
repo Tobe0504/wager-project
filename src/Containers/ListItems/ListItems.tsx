@@ -1,4 +1,3 @@
-import React from "react";
 import { useSearchParams } from "react-router-dom";
 import WagerCard from "../../Components/WagerCard/WagerCard";
 import { motion } from "framer-motion";
@@ -29,6 +28,7 @@ type ListItemsProps = {
 const ListItems = ({ list }: ListItemsProps) => {
   const [, setSearchParams] = useSearchParams();
   const currentSearchParams = new URLSearchParams(window.location.search);
+
   return (
     <motion.div
       className={classes.container}
