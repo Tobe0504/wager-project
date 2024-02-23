@@ -6,6 +6,33 @@ import { AppContext } from "../../Context/AppContext";
 import { useSearchParams } from "react-router-dom";
 import Modal from "../../Components/Modal/Modal";
 import CreateWagerForm from "../CreateWagerForm/CreateWagerForm";
+import { motion } from "framer-motion";
+
+const containerVaraiants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 3,
+      type: "spring",
+    },
+  },
+};
+
+const imageContainerVariants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      delay: 2,
+      type: "spring",
+    },
+  },
+};
 
 const HeroSection = () => {
   // Context
@@ -17,7 +44,11 @@ const HeroSection = () => {
   const showWagerModal = currentSearchParams.get("create-wager");
 
   return (
-    <section className={classes.container}>
+    <motion.section
+      className={classes.container}
+      initial="hidden"
+      animate="visible"
+    >
       {showWagerModal && (
         <Modal
           onClick={() => {
@@ -28,12 +59,9 @@ const HeroSection = () => {
         />
       )}
 
-      <div className={classes.textSection}>
-        <h4>Create, Sell & Collect Your Own Creative NFT</h4>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-          vulputate libero et velit.
-        </p>
+      <motion.div className={classes.textSection} variants={containerVaraiants}>
+        <h4>Bet Beyond Limits with Web3 Wagering</h4>
+        <p>Unlock the future of thrilling bets on the blockchain</p>
         <div className={classes.buttonSection}>
           <Button
             onClick={() => {
@@ -56,11 +84,14 @@ const HeroSection = () => {
             View live wagers
           </Button>
         </div>
-      </div>
-      <div className={classes.imageSection}>
+      </motion.div>
+      <motion.div
+        className={classes.imageSection}
+        variants={imageContainerVariants}
+      >
         <img src={heroImage} alt="Hero " />
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 };
 

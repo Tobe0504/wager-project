@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import AcceptedModal from "../../Components/Modal/Modal";
 import WagerInfo from "../WagerInfo/WagerInfo";
 import { AppContext } from "../../Context/AppContext";
+import { myWagerList, wagerList } from "../../Utilities/wagerList";
 
 const WagerList = () => {
   // Context
@@ -29,6 +30,7 @@ const WagerList = () => {
   const [, setSearchParams] = useSearchParams();
   const currentSearchParams = new URLSearchParams(window.location.search);
   const showWagerModal = currentSearchParams.get("wager");
+  const section = currentSearchParams.get("section");
 
   return (
     <section className={classes.container}>
@@ -41,13 +43,14 @@ const WagerList = () => {
           body={<WagerInfo />}
         />
       )}
-      <SectionHeader
-        title="Wagers"
-        paragraph="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-      />
+      <SectionHeader title="Wagers" paragraph="Dive into the Thrill" />
       <div className={classes.list} ref={listItemRefs}>
         <SectionsNav navItems={navItems} setNavItems={setNavItems} isRouting />
-        <ListItems />
+        {section === "wagers-for-you" ? (
+          <ListItems list={wagerList} />
+        ) : (
+          <ListItems list={myWagerList} />
+        )}
       </div>
     </section>
   );

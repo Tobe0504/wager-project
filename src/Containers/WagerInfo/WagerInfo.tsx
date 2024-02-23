@@ -8,6 +8,8 @@ const WagerInfo = () => {
     "wager"
   );
 
+  const section = new URLSearchParams(window.location.search).get("section");
+
   // Utils
   const activeWager = wagerList.find(
     (data) => String(data.id) === currentWagerId
@@ -39,8 +41,17 @@ const WagerInfo = () => {
         </div>
 
         <div className={classes.buttonSection}>
-          <Button>Bid for</Button>
-          <Button type="secondary">Bid against</Button>
+          {section === "wagers-by-you" ? (
+            <>
+              <Button type="secondary">Take down bid</Button>
+              <Button>View bidders</Button>
+            </>
+          ) : (
+            <>
+              <Button>Bid for</Button>
+              <Button type="secondary">Bid against</Button>{" "}
+            </>
+          )}
         </div>
       </div>
     </section>

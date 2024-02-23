@@ -57,3 +57,14 @@ export const wagerList = [
     description: "Dollar will rise against the naira",
   },
 ];
+
+export const myWagerList = [
+  {
+    user: "@tobe",
+    currenyBid: "0.005",
+    title: "Dollar fight",
+    image: wager1,
+    id: 1,
+    description: "Dollar will rise against the naira",
+  },
+];
