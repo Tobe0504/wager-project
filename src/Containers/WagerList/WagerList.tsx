@@ -1,4 +1,10 @@
 import { useContext, useState } from "react";
+import {
+  contractQuery,
+  decodeOutput,
+  useInkathon,
+  useRegisteredContract,
+} from '@scio-labs/use-inkathon'
 import SectionHeader from "../../Components/SectionHeader/SectionHeader";
 import classes from "./WagerList.module.css";
 import SectionsNav from "../../Components/SectionsNav/SectionsNav";
@@ -9,19 +15,69 @@ import WagerInfo from "../WagerInfo/WagerInfo";
 import { AppContext } from "../../Context/AppContext";
 import { myWagerList, wagerList } from "../../Utilities/wagerList";
 
+
+
+
 const WagerList = () => {
   // Context
   const { listItemRefs } = useContext(AppContext);
+  
+  const { api, activeAccount } = useInkathon()
+  const { contract } = useRegisteredContract("wagerr")
+
+  // Get Wagers
+  const getActiveWagers = async () => {
+    if (!contract || !api) return
+    if (!activeAccount) { return }
+    // setFetchIsLoading(true)
+    try {
+     
+      const result = await contractQuery(api, activeAccount.address, contract, 'getActiveWagers')
+      const { output, isError, decodedOutput } = decodeOutput(result, contract, 'getActiveWagers')
+      if (isError) throw new Error(decodedOutput)
+
+      console.log("active wagers", output)
+      
+    } catch (e) {
+      console.error(e)
+      // toast.error('Error while fetching greeting. Try again…')
+  
+    } finally {
+      // setFetchIsLoading(false)
+    }
+  }
+  const getPendingWagers = async () => {
+    if (!contract || !api) return
+    if (!activeAccount) { return }
+    // setFetchIsLoading(true)
+
+    try {
+      
+      const result = await contractQuery(api, activeAccount.address, contract, 'getPendingWagers')
+      const { output, isError, decodedOutput } = decodeOutput(result, contract, 'getPendingWagers')
+      if (isError) throw new Error(decodedOutput)
+
+      console.log("pending wagers", output)
+      
+    } catch (e) {
+      console.error(e)
+      // toast.error('Error while fetching greeting. Try again…')
+  
+    } finally {
+      // setFetchIsLoading(false)
+    }
+  }
+
 
   // States
   const [navItems, setNavItems] = useState([
     {
-      title: "Wagers for you",
+      title: "Active Wagers",
       isActive: true,
     },
 
     {
-      title: "Wagers by you",
+      title: "Pending Wagers",
       isActive: true,
     },
   ]);
@@ -32,6 +88,15 @@ const WagerList = () => {
   const showWagerModal = currentSearchParams.get("wager");
   const section = currentSearchParams.get("section");
 
+  const activeWagers = getActiveWagers();
+  const pendingWagers = getPendingWagers();
+
+  if (!contract || !api) return
+  if (!activeAccount) { return }
+
+ 
+  // const pendingWagers = useCall(wagerContract, 'getPendingWagers');
+  
   return (
     <section className={classes.container}>
       {showWagerModal && (
@@ -46,7 +111,7 @@ const WagerList = () => {
       <SectionHeader title="Wagers" paragraph="Dive into the Thrill" />
       <div className={classes.list} ref={listItemRefs}>
         <SectionsNav navItems={navItems} setNavItems={setNavItems} isRouting />
-        {section === "wagers-for-you" ? (
+        {section === "active-wagers" ? (
           <ListItems list={wagerList} />
         ) : (
           <ListItems list={myWagerList} />
