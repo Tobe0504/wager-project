@@ -30,23 +30,23 @@ const ConnectWallet = () => {
     
     if (!activeAccount)
         return (
-        <div className={classes.connectList}>
+        <div className={classes.walletList}>
             {
                 browserWallets.map((w) =>
                 isWalletInstalled(w) ? (
-                    <div className={classes.connect_option}  onClick={() => {
-                        connect?.(undefined, w);
-                    }} >
-                        <div className={classes.option_info}>{w.name}</div>
+                    <div className={classes.walletItem}>
+                        <button  onClick={() => { connect?.(undefined, w);}} >
+                            <img src={w.logoUrls[0]} alt='logo'></img>
+                            <div className={classes.option_info}>{w.name}</div>
+                        </button>
                     </div>
+                    
                 ) : (
-                    <div className={classes.connect_option}>
-                    <a href={w.urls.website}>
-                        <div className="align-center flex justify-start gap-2">
-                        <p>{w.name}</p>
-                        </div>
-                        <p>Not installed</p>
-                    </a>
+                    <div className={classes.walletItem}>
+                        <button disabled>
+                            <img src={w.logoUrls[0]} alt='logo'></img>
+                            <div className={classes.option_info}>{w.name}</div>
+                        </button>
                     </div>
                 ),
                 )

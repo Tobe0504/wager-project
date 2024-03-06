@@ -24,14 +24,13 @@ const CreateWagerForm = () => {
    
     try {
       const decimals = api.registry.chainDecimals?.[0] || 12
-      // const prefix = api.registry.chainSS58 || 42
       const formattedAmount =  new BN(amount).mul(new BN(10).pow(new BN(decimals)))
       const result = await contractTx(api, activeAccount.address, contract, 'createWager', {value: formattedAmount}, [
         name, terms
       ])
       return result;
   
-    } catch (e) {
+    } catch (e: any) {
     
       let message: string
       switch (e.errorMessage) {
@@ -59,7 +58,7 @@ const CreateWagerForm = () => {
     }
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     // const result = createWager()
     event.preventDefault();
 

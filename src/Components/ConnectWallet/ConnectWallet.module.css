@@ -7,8 +7,31 @@
     letter-spacing: 0em;
   }
 
-.connectList{
-    padding: 20px 0px;
+.walletList{
+    list-style: none;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.walletItem{
+  border: none;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.walletItem button{
+  text-decoration: none;
+  color: #333;
+  display: block;
+  width: 100%;
+  padding: 10px;
+}
+
+.walletItem button img{
+  width: 40px;
 }
 
 

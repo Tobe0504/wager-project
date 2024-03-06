@@ -1,5 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import WagerCard from "../../Components/WagerCard/WagerCard";
+import { BN } from '@polkadot/util'
+import {
+  useInkathon,
+} from '@scio-labs/use-inkathon'
 import { motion } from "framer-motion";
 import classes from "./ListItems.module.css";
 
@@ -28,6 +32,7 @@ type ListItemsProps = {
 const ListItems = ({ list }: ListItemsProps) => {
   const [, setSearchParams] = useSearchParams();
   const currentSearchParams = new URLSearchParams(window.location.search);
+  const { api } = useInkathon()
 
   return (
     <motion.div
@@ -37,13 +42,21 @@ const ListItems = ({ list }: ListItemsProps) => {
       animate="visible"
     >
       {list?.map((data, i) => {
+        const decimals = api?.registry.chainDecimals?.[0] || 12
+  
+        const bnAmount =  new BN(data.amount.replace(/,/g, '')).div(new BN(10**decimals))
+        const tokenSymbol = api?.registry?.chainTokens?.[0] || 'Unit'
+        const formattedAmount = `${bnAmount} ${tokenSymbol}`
+
         return (
+         
           <motion.div variants={workVariants} key={i}>
             <WagerCard
-              user={data.user}
-              bid={data.currenyBid}
-              title={data.title}
-              key={i}
+              creator={data.creator}
+              bettor={data.bettor}
+              amount={formattedAmount}
+              name={data.name}
+              key={data.id}
               image={data.image}
               onClick={() => {
                 currentSearchParams.set("wager", String(data.id));

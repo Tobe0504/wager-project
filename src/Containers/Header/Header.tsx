@@ -41,11 +41,15 @@ const Header = () => {
             body={<ConnectWallet />}
           />
         )}
-        
-        <Button onClick={() => {
-                currentSearchParams.set("connect-wallet", "true");
-                setSearchParams(currentSearchParams.toString());
-              }}>Connect Wallet</Button> 
+        <div>
+          <Button onClick={() => {
+              currentSearchParams.set("connect-wallet", "true");
+              setSearchParams(currentSearchParams.toString());
+            }}>
+              Connect Wallet
+          </Button> 
+        </div>
+       
       </motion.section>
       // <section className={classes.container}>
       //   <div className={classes.searchSection}>
