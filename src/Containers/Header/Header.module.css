@@ -2,14 +2,16 @@
   height: 100px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0 100px;
 }
 
-.container > div:nth-child(1) {
+.container > div {
   width: 384px;
+
 }
 
-.container > button:nth-child(2) {
+.container > div >  button {
   width: 171px;
+  float: right;
 }

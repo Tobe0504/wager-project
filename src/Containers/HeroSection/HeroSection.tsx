@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import Modal from "../../Components/Modal/Modal";
 import CreateWagerForm from "../CreateWagerForm/CreateWagerForm";
 import { motion } from "framer-motion";
+import { useInkathon } from "@scio-labs/use-inkathon";
 
 const containerVaraiants = {
   hidden: {
@@ -39,6 +40,9 @@ const imageContainerVariants = {
 const HeroSection = () => {
   // Context
   const { listItemRefs } = useContext(AppContext);
+  const {
+    activeAccount,
+  } = useInkathon()
 
   // Router
   const [, setSearchParams] = useSearchParams();
@@ -58,6 +62,7 @@ const HeroSection = () => {
             setSearchParams(currentSearchParams.toString());
           }}
           body={<CreateWagerForm />}
+          style={{width: "40vw", minHeight: "90vh"}}
         />
       )}
 
@@ -65,6 +70,15 @@ const HeroSection = () => {
         <h4>Bet Beyond Limits with Web3 Wagering</h4>
         <p>Unlock the future of thrilling bets on the blockchain</p>
         <div className={classes.buttonSection}>
+          {!activeAccount ?   <Button
+            onClick={() => {
+              currentSearchParams.set("connect-wallet", "true");
+              setSearchParams(currentSearchParams.toString());
+            }}
+          >
+            Connect wallet
+          </Button> :
+          <>
           <Button
             onClick={() => {
               currentSearchParams.set("create-wager", "true");
@@ -85,6 +99,9 @@ const HeroSection = () => {
           >
             View live wagers
           </Button>
+          </> 
+          }
+       
         </div>
       </motion.div>
       <motion.div

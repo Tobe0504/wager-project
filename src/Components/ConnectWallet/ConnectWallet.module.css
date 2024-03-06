@@ -1,11 +1,18 @@
-.text {
-    color: #ffffff80;
-    font-family: Poppins;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 30px;
-    letter-spacing: 0em;
-  }
+.container{
+  padding: 1.5rem;
+}
+
+.container > h4{
+  font-family: Poppins;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 140%;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #ffffffbb;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
 
 .walletList{
     list-style: none;
@@ -17,21 +24,31 @@
 }
 
 .walletItem{
-  border: none;
   border-radius: 5px;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 2px solid #ffffff80;
+  padding: .5rem 1rem;
+  margin-bottom: 1rem;
+  color: #ffffff80;
+
 }
 
-.walletItem button{
-  text-decoration: none;
-  color: #333;
-  display: block;
-  width: 100%;
-  padding: 10px;
+.walletItem {
+  width: 80%;
 }
 
-.walletItem button img{
+.walletItem >   img{
   width: 40px;
+}
+
+.walletItem > p{
+  font-family: Poppins;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0em;
 }
 
 
@@ -52,4 +69,12 @@
     gap: 10px;
     align-items: center;
     flex-direction: row;
+}
+
+.disabled{
+  cursor: not-allowed;
+}
+
+.active{
+  cursor: pointer;
 }

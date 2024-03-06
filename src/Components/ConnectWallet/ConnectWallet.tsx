@@ -30,30 +30,28 @@ const ConnectWallet = () => {
     
     if (!activeAccount)
         return (
+    <div className={classes.container}>
+        <h4>Connect Wallet</h4>
         <div className={classes.walletList}>
             {
                 browserWallets.map((w) =>
                 isWalletInstalled(w) ? (
-                    <div className={classes.walletItem}>
-                        <button  onClick={() => { connect?.(undefined, w);}} >
+                    <div className={`${classes.walletItem} ${classes.active}`} onClick={() => { connect?.(undefined, w);}}>
                             <img src={w.logoUrls[0]} alt='logo'></img>
-                            <div className={classes.option_info}>{w.name}</div>
-                        </button>
+                            <p className={classes.option_info}>{w.name}</p>
                     </div>
                     
                 ) : (
-                    <div className={classes.walletItem}>
-                        <button disabled>
+                    <div className={`${classes.walletItem} ${classes.disabled}`}>
                             <img src={w.logoUrls[0]} alt='logo'></img>
                             <div className={classes.option_info}>{w.name}</div>
-                        </button>
                     </div>
                 ),
                 )
             }
 
            
-            
+</div> 
         </div>
         )
     

@@ -50,4 +50,9 @@
   align-items: center;
   gap: 2rem;
   margin: 2rem 0;
+
+}
+ 
+.buttonSection > button{
+  max-width: 50%;
 }

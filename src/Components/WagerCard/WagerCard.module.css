@@ -1,15 +1,51 @@
-.container {
+/* .container {
   width: 100%;
   height: 595px;
   border-radius: 10px;
   box-shadow: 0px 5px 4px 0px #00000040;
   background: #ffffff1a;
-  padding: 1rem;
   display: flex;
   justify-content: center;
   flex-direction: column;
   transition: all 0.3s ease-in-out;
+} */
+
+.container{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 1rem;
+margin-bottom: 1rem;
+border: 2px solid #ffffff80;
+border-radius: 10px;
+transition: all .3s ease-in-out;
+
 }
+
+.imageSection{
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 10%;
+}
+.noBettor{
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff80;
+  font-size: 24px;
+  font-weight: 600;
+  border-radius: 50%;
+}
+
+.imageSection > img:nth-child(2), .imageSection > div:nth-child(2){
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 30px; 
+  margin: auto;}
 
 .container:hover {
   border: 1px solid;
@@ -27,7 +63,7 @@
 .user {
   max-width: 40%;
 }
-.user > img {
+.imageSection > img {
   width: 40px;
   border-radius: 50%;
   object-fit: cover;
@@ -47,14 +83,15 @@
   display: block;
 }
 
-.textSection > div:nth-child(1) > span:nth-child(1) {
+.nameSection {
   font-family: Poppins;
   font-size: 20px;
   font-weight: 500;
   line-height: 30px;
   letter-spacing: 0em;
   text-align: left;
-  color: #ffffff80;
+  color: #ffffff;
+  width: 40%;
 }
 
 .textSection > div:nth-child(1) > span:nth-child(2) {
@@ -68,7 +105,7 @@
   margin-top: 0.5rem;
 }
 
-.textSection > div:nth-child(2) > span:nth-child(1) {
+.amount {
   font-family: Poppins;
   font-size: 15px;
   font-weight: 500;
@@ -76,6 +113,7 @@
   letter-spacing: 0em;
   text-align: left;
   color: #ffffff80;
+  width: 10%;
 }
 
 .textSection > div:nth-child(2) > span:nth-child(2) {

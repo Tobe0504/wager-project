@@ -1,58 +1,67 @@
+import { useContext, useState, useEffect } from "react";
+import {
+  // contractTx,
+  useInkathon,
+  useRegisteredContract,
+} from '@scio-labs/use-inkathon';
 import classes from "./WagerInfo.module.css";
-import { wagerList } from "../../Utilities/wagerList";
-import Button from "../../Components/Button/Button";
+import { AppContext } from "../../Context/AppContext";
 
 const WagerInfo = () => {
   // Router
-  const currentWagerId = new URLSearchParams(window.location.search).get(
+  const { api, activeAccount } = useInkathon()
+  const { contract } = useRegisteredContract("wagerr")
+  const id = new URLSearchParams(window.location.search).get(
     "wager"
-  );
+  ) || "";
+  const { getWager } = useContext(AppContext)
+  const [ wager, setWager] = useState({});
 
-  const section = new URLSearchParams(window.location.search).get("section");
+  useEffect(() => {
+      if (!contract || !api) return
+      if (!activeAccount) { return }
+      const fetchWager = async (id: string) => {
+          try {
+              const wager: any = await getWager(id);
+              setWager(wager);
+              
+          } catch (error) {
+              console.error(error);
+          }
+      };
 
-  // Utils
-  const activeWager = wagerList.find(
-    (data) => String(data.id) === currentWagerId
-  );
+      fetchWager(id);
+
+  }, [activeAccount, api, contract, id, getWager]);
+
+
   return (
     <section className={classes.container}>
       <div className={classes.imageSection}>
-        <img src={activeWager?.image} alt={activeWager?.title} />
+        {/* <img src={wager?.image} alt={wager?.title} /> */}
       </div>
       <div className={classes.textSection}>
         <div>
           <span>Title:</span>
-          <span>{activeWager?.title}</span>
+          <span>{wager?.name}</span>
         </div>
 
         <div>
           <span>Description:</span>
-          <span>{activeWager?.description}</span>
+          <span>{wager?.terms}</span>
         </div>
 
         <div>
           <span>User:</span>
-          <span>{activeWager?.user}</span>
+          <span>{wager?.creator}</span>
         </div>
 
         <div>
           <span>Current bid:</span>
-          <span>{activeWager?.currenyBid} ETH</span>
+          <span>{wager?.amount} ETH</span>
         </div>
 
-        <div className={classes.buttonSection}>
-          {section === "wagers-by-you" ? (
-            <>
-              <Button type="secondary">Take down bid</Button>
-              <Button>View bidders</Button>
-            </>
-          ) : (
-            <>
-              <Button>Bid for</Button>
-              <Button type="secondary">Bid against</Button>{" "}
-            </>
-          )}
-        </div>
+
       </div>
     </section>
   );

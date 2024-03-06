@@ -7,20 +7,36 @@ import {
 } from '@scio-labs/use-inkathon'
 import Button from "../../Components/Button/Button";
 import Input from "../../Components/Input/Input";
+import createWagerImage from "../../Assets/Images/createWager.jpg"
+import { useContext, useState } from "react";
+import Error from "../../Components/Error/Error";
+import { AppContext } from "../../Context/AppContext";
 
 const CreateWagerForm = () => {
   // Context
-  // const { listItemRefs } = useContext(AppContext);
+  const { fetchWagers } = useContext(AppContext);
   
   const { api, activeAccount, activeSigner } = useInkathon()
   const { contract } = useRegisteredContract("wagerr")
 
+  // State
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState<{}>({type: "success", message: null})
+
+
   // Create Wager
   const createWager = async (name: string, terms: string, amount: string) => {
+    setLoading(false)
+    setMessage({type: "success", message: null})
+
     if (!activeAccount || !contract || !activeSigner || !api) {
       // toast.error('Wallet not connected. Try again…')
+      setMessage({type: "success", message: null})
       return;
+
     }
+
+    setLoading(true)
    
     try {
       const decimals = api.registry.chainDecimals?.[0] || 12
@@ -28,7 +44,12 @@ const CreateWagerForm = () => {
       const result = await contractTx(api, activeAccount.address, contract, 'createWager', {value: formattedAmount}, [
         name, terms
       ])
+    setLoading(false)
+    console.log(result)
+    setMessage({type: "success", message: "Wager created!"})
+    fetchWagers()
       return result;
+      
   
     } catch (e: any) {
     
@@ -51,21 +72,26 @@ const CreateWagerForm = () => {
           message = e ? `Transaction failed (${e})` : 'Transaction failed'
       }
       console.log(message)
-      // toast.error('Error while fetching greeting. Try again…')
+      setMessage({type: "error", message})
+
+    setLoading(false)
+    // toast.error('Error while fetching greeting. Try again…')
   
     } finally {
   
     }
   }
 
+
   const handleSubmit = async (event: any) => {
     // const result = createWager()
-    event.preventDefault();
 
-    const name = event.target.name.value;
-    const terms = event.target.terms.value;
-    const amount = event.target.amount.value;
-   
+    event.preventDefault();
+  
+
+    const name = event.target.Name.value;
+    const terms = event.target.Terms.value;
+    const amount = event.target.Amount.value;
     const result = await createWager(name, terms, amount)
     console.log(result)
     event.target.reset();
@@ -74,36 +100,37 @@ const CreateWagerForm = () => {
   return (
     <div className={classes.container}>
       <div className={classes.imageSection}>
-        <img src="" alt="Create Wager" />
+        <img src={createWagerImage} alt="Create Wager" />
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={classes.textSection}>
+
         <div>
           <h4>Create Wager</h4>
           <p>Let's bet about something they don't see coming</p>
         </div>
+
+      {message?.message &&  <Error type={message?.type as "success" | "error"}>{message.message}</Error>}
+
         <div>
-          <span>Name:</span>
           <span>
-            <Input label="name" placeholder="Arsenal to win next game." />
+            <Input label="Name" placeholder="Arsenal to win next game." />
           </span>
         </div>
 
         <div>
-          <span>Terms:</span>
           <span>
-            <Input label="terms" placeholder="Arsenal FC to win their next EPL game." />
+            <Input label="Terms" placeholder="Arsenal FC to win their next EPL game." />
           </span>
         </div>
 
         <div>
-          <span>Wager bid:</span>
           <span>
-            <Input label="amount" placeholder="2"/>
+            <Input label="Amount" placeholder="2"/>
           </span>
         </div>
 
         <div className={classes.buttonSection}>
-          <Button>Create wager</Button>
+          <Button loading={loading}>Create wager</Button>
         </div>
       </form>
     </div>

@@ -7,7 +7,7 @@
 
 .container > .imageSection {
   height: 100%;
-  width: 50%;
+  width: 0%;
 }
 
 .container > .imageSection > img {
@@ -19,6 +19,7 @@
 .textSection {
   flex: 1;
   padding: 2rem;
+  overflow-y: auto;
 }
 
 .textSection > div {

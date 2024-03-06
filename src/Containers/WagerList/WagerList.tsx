@@ -1,7 +1,5 @@
 import { useContext, useState, useEffect } from "react";
 import {
-  contractQuery,
-  decodeOutput,
   useInkathon,
   useRegisteredContract,
 } from '@scio-labs/use-inkathon'
@@ -18,7 +16,7 @@ import { AppContext } from "../../Context/AppContext";
 
 const WagerList = () => {
   // Context
-  const { listItemRefs } = useContext(AppContext);
+  const { listItemRefs, pendingWagers, activeWagers, fetchWagers} = useContext(AppContext);
   
   const { api, activeAccount } = useInkathon()
   const { contract } = useRegisteredContract("wagerr")
@@ -38,66 +36,13 @@ const WagerList = () => {
     },
   ]);
 
-  const [activeWagers, setActiveWagers] = useState([]);
-  const [pendingWagers, setPendingWagers] = useState([]);
   
 
   useEffect(() => {
-     // Get Wagers
-    const getActiveWagers = async () => {
-      if (!contract || !api) return
-      if (!activeAccount) { return }
-      // setFetchIsLoading(true)
-      try {
-      
-        const result = await contractQuery(api, activeAccount.address, contract, 'getActiveWagers')
-        const { output, isError, decodedOutput } = decodeOutput(result, contract, 'getActiveWagers')
-        if (isError) throw new Error(decodedOutput)
-        console.log('decoded', decodedOutput)
-        return output
-        
-      } catch (e) {
-        console.error(e)
-        // toast.error('Error while fetching greeting. Try again…')
-      } finally {
-        // setFetchIsLoading(false)
-      }
-    }
-    const getPendingWagers = async () => {
-      if (!contract || !api) return
-      if (!activeAccount) { return }
-      // setFetchIsLoading(true)
-
-      try {
-        
-        const result = await contractQuery(api, activeAccount.address, contract, 'getPendingWagers')
-        const { output, isError, decodedOutput } = decodeOutput(result, contract, 'getPendingWagers')
-        if (isError) throw new Error(decodedOutput)
-
-        console.log('decoded', decodedOutput)
-        return output
-        
-      } catch (e) {
-        console.error(e)
-        // toast.error('Error while fetching greeting. Try again…')
-    
-      } finally {
-        // setFetchIsLoading(false)
-      }
-    }
-    const fetchWagers = async () => {
-      try {
-        const activeWagersResult = await getActiveWagers();
-        setActiveWagers(activeWagersResult);
-        
-        const pendingWagersResult = await getPendingWagers();
-        setPendingWagers(pendingWagersResult);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
+     // Get Wager
     fetchWagers();
+
+  
   }, [activeAccount, api, contract]);
 
   // Router
