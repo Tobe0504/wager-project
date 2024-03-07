@@ -43,7 +43,7 @@ const WagerList = () => {
     fetchWagers();
 
   
-  }, [activeAccount, api, contract]);
+  }, [activeAccount, api, contract, fetchWagers]);
 
   // Router
   const [, setSearchParams] = useSearchParams();

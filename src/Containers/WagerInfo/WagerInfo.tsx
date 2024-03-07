@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import {
-  // contractTx,
+  contractQuery,
+  decodeOutput,
   useInkathon,
   useRegisteredContract,
 } from '@scio-labs/use-inkathon';
@@ -34,6 +35,48 @@ const WagerInfo = () => {
 
   }, [activeAccount, api, contract, id, getWager]);
 
+  enum ClaimAction {
+    Accept,
+    Reject,
+  }
+
+  // claim the win
+  const claimWin = async (wager: any) => {
+    if (!contract || !api) return
+    if (!activeAccount) { return }
+    // setFetchIsLoading(true)
+    try {
+    
+        const result = await contractQuery(api, activeAccount.address, contract, 'claimWin', {}, [wager.id])
+        const { output, isError, decodedOutput } = decodeOutput(result, contract, 'claimWin')
+        if (isError) throw new Error(decodedOutput)
+        return output
+        
+    } catch (e) {
+        return e
+    } finally {
+        // setFetchIsLoading(false)
+    }
+  }
+
+  // accept or reject claim to the wager
+  const acceptRejectClaim = async (wager: any, action: ClaimAction) => {
+    if (!contract || !api) return
+    if (!activeAccount) { return }
+    // setFetchIsLoading(true)
+    try {
+    
+        const result = await contractQuery(api, activeAccount.address, contract, 'acceptRejectClaim', {}, [wager.id, action])
+        const { output, isError, decodedOutput } = decodeOutput(result, contract, 'acceptRejectClaim')
+        if (isError) throw new Error(decodedOutput)
+        return output
+        
+    } catch (e) {
+        return e
+    } finally {
+        // setFetchIsLoading(false)
+    }
+  }
 
   return (
     <section className={classes.container}>
