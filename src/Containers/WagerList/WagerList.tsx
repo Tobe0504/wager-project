@@ -43,7 +43,7 @@ const WagerList = () => {
     fetchWagers();
 
   
-  }, [activeAccount, api, contract, fetchWagers]);
+  }, [activeAccount, contract]);
 
   // Router
   const [, setSearchParams] = useSearchParams();
@@ -67,6 +67,8 @@ const WagerList = () => {
             setSearchParams(currentSearchParams.toString());
           }}
           body={<WagerInfo />}
+          style={{ overflowY: "auto", minHeight: "70vh"}}
+          
         />
       )}
       <SectionHeader title="Wagers" paragraph="Dive into the Thrill" />

@@ -16,7 +16,7 @@ const WagerCard = ({ creator, bettor, name, amount, onClick }: WagerCardProps) =
   
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} onClick={onClick}>
 
       <div className={classes.imageSection}>
       <img src={wager1} alt="Wager 1" />
