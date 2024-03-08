@@ -7,6 +7,14 @@ import {
 } from '@scio-labs/use-inkathon';
 import classes from "./WagerInfo.module.css";
 import { AppContext } from "../../Context/AppContext";
+import wager1 from "../../Assets/Images/wager1.jpg"
+import Loader from "../../Components/Loader/Loader";
+import Button from "../../Components/Button/Button";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
+import Error from "../../Components/Error/Error";
+
+
 
 const WagerInfo = () => {
   // Router
@@ -17,23 +25,42 @@ const WagerInfo = () => {
   ) || "";
   const { getWager } = useContext(AppContext)
   const [ wager, setWager] = useState({});
+  const [loading, setLoading] = useState(false)
+  const [wagerLink, setWagerLink] = useState('')
+  const [error, setError] = useState<{
+    type: "success" | "error", error: null | string
+  }>({
+    type: "success", error: null
+  })
+
 
   useEffect(() => {
+    
       if (!contract || !api) return
       if (!activeAccount) { return }
       const fetchWager = async (id: string) => {
+        setLoading(true)
           try {
               const wager: any = await getWager(id);
               setWager(wager);
+setWagerLink(`${window.location}?wager=${wager?.id}`)
+
+        setLoading(false)
+
               
           } catch (error) {
               console.error(error);
+        setLoading(false)
+
           }
+
       };
 
       fetchWager(id);
 
-  }, [activeAccount, api, contract, id, getWager]);
+  }, [activeAccount, id, contract]);
+
+  console.log(id, activeAccount, contract)
 
   enum ClaimAction {
     Accept,
@@ -78,34 +105,84 @@ const WagerInfo = () => {
     }
   }
 
+  console.log(wager, "Wager", window.location)
+
+  const copyWagerLink = async() => {
+setError({type: "success", error: null})
+
+    try {
+      await navigator.clipboard.writeText(wagerLink);
+      setError({type: "success", error: 'Wager link copied to clipboard'})
+    } catch (err) {
+      setError({type: "error", error:'Failed to copy wager link'});
+    }
+  }
+
+
+
+
+
+
+if(loading){
+  return  <div className={classes.container}><Loader /></div>
+}
+
   return (
     <section className={classes.container}>
-      <div className={classes.imageSection}>
-        {/* <img src={wager?.image} alt={wager?.title} /> */}
-      </div>
+
+    
+    
       <div className={classes.textSection}>
+
+      {error?.error && <Error type="success">{error?.error}</Error>}
+
+      <div className={classes.imageSection}>
+          <img src={wager1} alt="Wager 1" />
+       {wager?.bettor ? <img src={wager3} alt="Wager 1" />: 
+          <div className={classes.noBettor}>?</div>} 
+      </div>
+
+
+      <div>
+          <span>{wager?.creator} </span>
+          <span>vs</span>
+          <span> {wager?.bettor || "?"}</span>
+        </div>
+
+
         <div>
-          <span>Title:</span>
+          <span>Name:</span>
           <span>{wager?.name}</span>
         </div>
 
         <div>
-          <span>Description:</span>
+          <span>Wager Terms:</span>
           <span>{wager?.terms}</span>
         </div>
 
         <div>
-          <span>User:</span>
-          <span>{wager?.creator}</span>
+          <span>Amount:</span>
+          <span>{wager?.amount}</span>
         </div>
+
+     
 
         <div>
-          <span>Current bid:</span>
-          <span>{wager?.amount} ETH</span>
+          <span>Total Stake:</span>
+          <span>{wager?.totalStake} ETH</span>
         </div>
 
 
+        <div>
+
+          <Button type="secondary" onClick={copyWagerLink}>
+            <span>Share wager link</span>
+            <FontAwesomeIcon icon={faCopy}/>
+          </Button>
+        </div>
+
       </div>
+
     </section>
   );
 };
