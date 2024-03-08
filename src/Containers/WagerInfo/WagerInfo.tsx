@@ -43,7 +43,7 @@ const WagerInfo = () => {
       try {
         const wager: any = await getWager(id);
         setWager(wager);
-        setWagerLink(`${window.location.origin}?join-wager${wager?.id}`);
+        setWagerLink(`${window.location.origin}?join-wager=${wager?.id}`);
 
         setLoading(false);
       } catch (error) {

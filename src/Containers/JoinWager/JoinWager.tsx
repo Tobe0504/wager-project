@@ -8,6 +8,9 @@ import {
 import { AppContext } from "../../Context/AppContext";
 
 
+// "build": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+
+
 
   
 const JoinWager = () => {
