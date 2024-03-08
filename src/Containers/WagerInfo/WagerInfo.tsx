@@ -144,31 +144,32 @@ if(loading){
 
 
       <div>
-          <span>User 1 vs ?</span>
-          <span>{wager?.name}</span>
+          <span>{wager?.creator} </span>
+          <span>vs</span>
+          <span> {wager?.bettor || "?"}</span>
         </div>
 
 
         <div>
-          <span>Title:</span>
+          <span>Name:</span>
           <span>{wager?.name}</span>
         </div>
 
         <div>
-          <span>Description:</span>
+          <span>Wager Terms:</span>
           <span>{wager?.terms}</span>
         </div>
 
         <div>
-          <span>User:</span>
-          <span>{wager?.creator}</span>
+          <span>Amount:</span>
+          <span>{wager?.amount}</span>
         </div>
 
      
 
         <div>
-          <span>Current bid:</span>
-          <span>{wager?.amount} ETH</span>
+          <span>Total Stake:</span>
+          <span>{wager?.totalStake} ETH</span>
         </div>
 
 

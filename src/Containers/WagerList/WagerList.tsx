@@ -67,7 +67,7 @@ const WagerList = () => {
             setSearchParams(currentSearchParams.toString());
           }}
           body={<WagerInfo />}
-          style={{ overflowY: "auto", minHeight: "70vh"}}
+          style={{ overflowY: "auto", minHeight: "80vh"}}
           
         />
       )}
