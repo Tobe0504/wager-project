@@ -108,7 +108,7 @@ setWagerLink(`${window.location}?wager=${wager?.id}`)
   console.log(wager, "Wager", window.location)
 
   const copyWagerLink = async() => {
-setError({type: "success", error: null})
+    setError({type: "success", error: null})
 
     try {
       await navigator.clipboard.writeText(wagerLink);
