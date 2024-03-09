@@ -42,23 +42,6 @@ const WagerList = () => {
   const currentSearchParams = new URLSearchParams(window.location.search);
   const showWagerModal = currentSearchParams.get("wager");
   const section = currentSearchParams.get("section");
-  const joinWagerId = currentSearchParams.get("join-wager");
-
-  // const activeWagers = getActiveWagers();
-  // const pendingWagers = getPendingWagers();
-  useEffect(() => {
-    if (joinWagerId && !activeAccount) {
-      currentSearchParams.set("connect-wallet", "true");
-      setSearchParams(currentSearchParams.toString());
-    }
-
-    if (joinWagerId && activeAccount) {
-      currentSearchParams.set("wager", joinWagerId);
-      setSearchParams(currentSearchParams.toString());
-    }
-
-    // eslint-disable-next-line
-  }, []);
 
   if (!contract || !api) return;
   if (!activeAccount) {

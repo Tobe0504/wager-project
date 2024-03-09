@@ -33,6 +33,9 @@ const WagerInfo = () => {
     error: null,
   });
 
+  const currentSearchParams = new URLSearchParams(window.location.search);
+  const section = currentSearchParams.get("section");
+
   useEffect(() => {
     if (!contract || !api) return;
     if (!activeAccount) {
@@ -43,7 +46,7 @@ const WagerInfo = () => {
       try {
         const wager: any = await getWager(id);
         setWager(wager);
-        setWagerLink(`${window.location.origin}?join-wager=${wager?.id}`);
+        setWagerLink(`${window.location.origin}?wager=${wager?.id}`);
 
         setLoading(false);
       } catch (error) {
@@ -222,19 +225,66 @@ const WagerInfo = () => {
           <span>{wager?.totalStake} ETH</span>
         </div>
 
-        {wager.creator === activeAccount.address ? (
-          <div>
-            <Button type="secondary" onClick={copyWagerLink}>
-              <span>Share wager link</span>
-              <FontAwesomeIcon icon={faCopy} />
-            </Button>
-          </div>
-        ) : (
-          <Button onClick={joinWager}>
-            <span>Join wager</span>
-            <FontAwesomeIcon icon={faCopy} />
-          </Button>
-        )}
+        {section === "pending-wagers" &&
+          (wager.creator === activeAccount.address ? (
+            <div>
+              <Button type="secondary" onClick={copyWagerLink}>
+                <span>Share wager link</span>
+                <FontAwesomeIcon icon={faCopy} />
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Button onClick={joinWager} disabled={!activeAccount}>
+                <span>Join wager</span>
+              </Button>
+              {!activeAccount && (
+                <p className={classes.error}>
+                  *You must connect to a wallet to join a wager
+                </p>
+              )}
+            </div>
+          ))}
+
+        {section === "active-wagers" &&
+          (wager?.claimant && wager?.claimant !== activeAccount.address ? (
+            <div>
+              <Button
+                type="primary"
+                onClick={() => {
+                  acceptRejectClaim(activeAccount, ClaimAction.Accept);
+                }}
+              >
+                <span>Accept Claim</span>
+              </Button>
+
+              <Button
+                type="secondary"
+                onClick={() => {
+                  acceptRejectClaim(activeAccount, ClaimAction.Reject);
+                }}
+              >
+                <span>Reject Claim</span>
+              </Button>
+            </div>
+          ) : !wager?.claimed && !wager?.claimant ? (
+            <div>
+              <Button
+                type="primary"
+                onClick={() => {
+                  claimWin(activeAccount);
+                }}
+              >
+                <span>Claim win</span>
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Button type="secondary">
+                <span>Waiting</span>
+              </Button>
+            </div>
+          ))}
       </div>
     </section>
   );
