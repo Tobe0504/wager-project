@@ -1,8 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import {
-  useInkathon,
-  useRegisteredContract,
-} from '@scio-labs/use-inkathon'
+import { useInkathon, useRegisteredContract } from "@scio-labs/use-inkathon";
 import SectionHeader from "../../Components/SectionHeader/SectionHeader";
 import classes from "./WagerList.module.css";
 import SectionsNav from "../../Components/SectionsNav/SectionsNav";
@@ -12,16 +9,13 @@ import AcceptedModal from "../../Components/Modal/Modal";
 import WagerInfo from "../WagerInfo/WagerInfo";
 import { AppContext } from "../../Context/AppContext";
 
-
-
 const WagerList = () => {
   // Context
-  const { listItemRefs, pendingWagers, activeWagers, fetchWagers} = useContext(AppContext);
-  
-  const { api, activeAccount } = useInkathon()
-  const { contract } = useRegisteredContract("wagerr")
+  const { listItemRefs, pendingWagers, activeWagers, fetchWagers } =
+    useContext(AppContext);
 
-
+  const { api, activeAccount } = useInkathon();
+  const { contract } = useRegisteredContract("wagerr");
 
   // States
   const [navItems, setNavItems] = useState([
@@ -36,13 +30,11 @@ const WagerList = () => {
     },
   ]);
 
-  
-
   useEffect(() => {
-     // Get Wager
+    // Get Wager
     fetchWagers();
 
-  
+    // eslint-disable-next-line
   }, [activeAccount, contract]);
 
   // Router
@@ -50,13 +42,28 @@ const WagerList = () => {
   const currentSearchParams = new URLSearchParams(window.location.search);
   const showWagerModal = currentSearchParams.get("wager");
   const section = currentSearchParams.get("section");
+  const joinWagerId = currentSearchParams.get("join-wager");
 
   // const activeWagers = getActiveWagers();
   // const pendingWagers = getPendingWagers();
+  useEffect(() => {
+    if (joinWagerId && !activeAccount) {
+      currentSearchParams.set("connect-wallet", "true");
+      setSearchParams(currentSearchParams.toString());
+    }
 
-  if (!contract || !api) return
-  if (!activeAccount) { return }
+    if (joinWagerId && activeAccount) {
+      currentSearchParams.set("wager", joinWagerId);
+      setSearchParams(currentSearchParams.toString());
+    }
 
+    // eslint-disable-next-line
+  }, []);
+
+  if (!contract || !api) return;
+  if (!activeAccount) {
+    return;
+  }
 
   return (
     <section className={classes.container}>
@@ -67,8 +74,7 @@ const WagerList = () => {
             setSearchParams(currentSearchParams.toString());
           }}
           body={<WagerInfo />}
-          style={{ overflowY: "auto", minHeight: "80vh"}}
-          
+          style={{ overflowY: "auto", minHeight: "95vh" }}
         />
       )}
       <SectionHeader title="Wagers" paragraph="Dive into the Thrill" />

@@ -9,7 +9,7 @@ import Button from "../../Components/Button/Button";
 import Input from "../../Components/Input/Input";
 import createWagerImage from "../../Assets/Images/createWager.jpg"
 import { useContext, useState } from "react";
-import Error from "../../Components/Error/Error";
+import ErrorNotification from "../../Components/Error/Error";
 import { AppContext } from "../../Context/AppContext";
 
 const CreateWagerForm = () => {
@@ -21,7 +21,10 @@ const CreateWagerForm = () => {
 
   // State
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState<{}>({type: "success", message: null})
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    message: null | string;
+  }>({type: "success", message: null})
 
 
   // Create Wager
@@ -44,10 +47,9 @@ const CreateWagerForm = () => {
       const result = await contractTx(api, activeAccount.address, contract, 'createWager', {value: formattedAmount}, [
         name, terms
       ])
-    setLoading(false)
-    console.log(result)
-    setMessage({type: "success", message: "Wager created!"})
-    fetchWagers()
+      setLoading(false)
+      setMessage({type: "success", message: "Wager created!"})
+      fetchWagers()
       return result;
       
   
@@ -75,7 +77,7 @@ const CreateWagerForm = () => {
       setMessage({type: "error", message})
 
     setLoading(false)
-    // toast.error('Error while fetching greeting. Try again…')
+
   
     } finally {
   
@@ -109,7 +111,7 @@ const CreateWagerForm = () => {
           <p>Let's bet about something they don't see coming</p>
         </div>
 
-      {message?.message &&  <Error type={message?.type as "success" | "error"}>{message.message}</Error>}
+      {message?.message &&  <ErrorNotification type={message?.type as "success" | "error"}>{message?.message}</ErrorNotification>}
 
         <div>
           <span>
