@@ -344,7 +344,7 @@ const WagerInfo = () => {
               >
                 <span>Accept Claim</span>
               </Button>
-              <div></div>
+              <div style={{padding: "4px 0"}}></div>
               <Button
                 type="secondary"
                 loading={btnLoading && claimRejected}
