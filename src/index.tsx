@@ -17,7 +17,7 @@ const getDeployments = async (): Promise<SubstrateDeployment[]> => {
       contractId: 'wagerr',
       networkId: alephzeroTestnet.network,
       abi: metadata,
-      address: '5DaaN9XTEZrWSnA7DR6LBuVxSN55rC9JocZGpegnVhKoENv4',
+      address: '5DhzLoGLK2vD1S73gB4J5hmhRyucy7GYb4VnnFSfJCZ6YcJ7',
     },
   ]
 }
