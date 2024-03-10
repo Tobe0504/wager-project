@@ -1,35 +1,42 @@
 import classes from "./WagerCard.module.css";
 import wager1 from "../../Assets/Images/wager1.jpg";
-import Button from "../Button/Button";
+import wager3 from "../../Assets/Images/wager3.jpg";
 
 
 type WagerCardProps = {
-  user: string;
-  title: string;
-  bid: string;
+  creator: string;
+  bettor: string;
+  name: string;
   image?: string;
+  amount: string;
   onClick?: () => void;
 };
 
-const WagerCard = ({ user, title, bid, image, onClick }: WagerCardProps) => {
+const WagerCard = ({ creator, bettor, name, amount, onClick }: WagerCardProps) => {
   
 
   return (
-    <div className={classes.container}>
-      <img src={image || wager1} alt="Wager 1" />
-      <div className={classes.textSection}>
-        <div>
-          <span>{user}</span>
-          <span>{title}</span>
-        </div>
+    <div className={classes.container} onClick={onClick}>
 
-        <div>
-          <span>Current Bid</span>
-          <span>{bid} ETH</span>
+      <div className={classes.imageSection}>
+      <img src={wager1} alt="Wager 1" />
+      {bettor ? <img src={wager3} alt="Wager 1" />: 
+      <div className={classes.noBettor}>?</div>}
+
+      </div>
+      <h2 className={classes.nameSection}>{name}</h2>
+      <div className={classes.amount}>
+          <span> {amount}</span>
         </div>
+      <div className={classes.userSection}>
+        <div className={classes.user}>
+        </div>
+    
+
+        
       </div>
 
-      <Button onClick={onClick}> View details</Button>
+      {/* <Button onClick={onClick}> View details</Button> */}
     </div>
   );
 };

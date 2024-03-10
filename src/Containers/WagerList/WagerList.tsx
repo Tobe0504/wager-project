@@ -1,10 +1,5 @@
-import { useContext, useState } from "react";
-import {
-  contractQuery,
-  decodeOutput,
-  useInkathon,
-  useRegisteredContract,
-} from '@scio-labs/use-inkathon'
+import { useContext, useState, useEffect } from "react";
+import { useInkathon, useRegisteredContract } from "@scio-labs/use-inkathon";
 import SectionHeader from "../../Components/SectionHeader/SectionHeader";
 import classes from "./WagerList.module.css";
 import SectionsNav from "../../Components/SectionsNav/SectionsNav";
@@ -13,61 +8,14 @@ import { useSearchParams } from "react-router-dom";
 import AcceptedModal from "../../Components/Modal/Modal";
 import WagerInfo from "../WagerInfo/WagerInfo";
 import { AppContext } from "../../Context/AppContext";
-import { myWagerList, wagerList } from "../../Utilities/wagerList";
-
-
-
 
 const WagerList = () => {
   // Context
-  const { listItemRefs } = useContext(AppContext);
-  
-  const { api, activeAccount } = useInkathon()
-  const { contract } = useRegisteredContract("wagerr")
+  const { listItemRefs, pendingWagers, activeWagers, fetchWagers } =
+    useContext(AppContext);
 
-  // Get Wagers
-  const getActiveWagers = async () => {
-    if (!contract || !api) return
-    if (!activeAccount) { return }
-    // setFetchIsLoading(true)
-    try {
-     
-      const result = await contractQuery(api, activeAccount.address, contract, 'getActiveWagers')
-      const { output, isError, decodedOutput } = decodeOutput(result, contract, 'getActiveWagers')
-      if (isError) throw new Error(decodedOutput)
-
-      console.log("active wagers", output)
-      
-    } catch (e) {
-      console.error(e)
-      // toast.error('Error while fetching greeting. Try again…')
-  
-    } finally {
-      // setFetchIsLoading(false)
-    }
-  }
-  const getPendingWagers = async () => {
-    if (!contract || !api) return
-    if (!activeAccount) { return }
-    // setFetchIsLoading(true)
-
-    try {
-      
-      const result = await contractQuery(api, activeAccount.address, contract, 'getPendingWagers')
-      const { output, isError, decodedOutput } = decodeOutput(result, contract, 'getPendingWagers')
-      if (isError) throw new Error(decodedOutput)
-
-      console.log("pending wagers", output)
-      
-    } catch (e) {
-      console.error(e)
-      // toast.error('Error while fetching greeting. Try again…')
-  
-    } finally {
-      // setFetchIsLoading(false)
-    }
-  }
-
+  const { api, activeAccount } = useInkathon();
+  const { contract } = useRegisteredContract("wagerr");
 
   // States
   const [navItems, setNavItems] = useState([
@@ -82,21 +30,41 @@ const WagerList = () => {
     },
   ]);
 
+  useEffect(() => {
+    // Get Wager
+    fetchWagers();
+
+    // eslint-disable-next-line
+  }, [activeAccount, contract]);
+
   // Router
   const [, setSearchParams] = useSearchParams();
   const currentSearchParams = new URLSearchParams(window.location.search);
   const showWagerModal = currentSearchParams.get("wager");
   const section = currentSearchParams.get("section");
+  const joinWagerId = currentSearchParams.get("join-wager");
 
-  const activeWagers = getActiveWagers();
-  const pendingWagers = getPendingWagers();
+  // const activeWagers = getActiveWagers();
+  // const pendingWagers = getPendingWagers();
+  useEffect(() => {
+    if (joinWagerId && !activeAccount) {
+      currentSearchParams.set("connect-wallet", "true");
+      setSearchParams(currentSearchParams.toString());
+    }
 
-  if (!contract || !api) return
-  if (!activeAccount) { return }
+    if (joinWagerId && activeAccount) {
+      currentSearchParams.set("wager", joinWagerId);
+      setSearchParams(currentSearchParams.toString());
+    }
 
- 
-  // const pendingWagers = useCall(wagerContract, 'getPendingWagers');
-  
+    // eslint-disable-next-line
+  }, []);
+
+  if (!contract || !api) return;
+  if (!activeAccount) {
+    return;
+  }
+
   return (
     <section className={classes.container}>
       {showWagerModal && (
@@ -106,15 +74,16 @@ const WagerList = () => {
             setSearchParams(currentSearchParams.toString());
           }}
           body={<WagerInfo />}
+          style={{ overflowY: "auto", minHeight: "95vh" }}
         />
       )}
       <SectionHeader title="Wagers" paragraph="Dive into the Thrill" />
       <div className={classes.list} ref={listItemRefs}>
         <SectionsNav navItems={navItems} setNavItems={setNavItems} isRouting />
         {section === "active-wagers" ? (
-          <ListItems list={wagerList} />
+          <ListItems list={activeWagers} />
         ) : (
-          <ListItems list={myWagerList} />
+          <ListItems list={pendingWagers} />
         )}
       </div>
     </section>

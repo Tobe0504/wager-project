@@ -39,41 +39,29 @@ const Header = () => {
               setSearchParams(currentSearchParams.toString());
             }}
             body={<ConnectWallet />}
+          style={{width: "40vw", overflowY: "auto", height: "80vh"}}
+
           />
         )}
-        
-        <Button onClick={() => {
-                currentSearchParams.set("connect-wallet", "true");
-                setSearchParams(currentSearchParams.toString());
-              }}>Connect Wallet</Button> 
+        <div>
+          <Button onClick={() => {
+              currentSearchParams.set("connect-wallet", "true");
+              setSearchParams(currentSearchParams.toString());
+            }}>
+              Connect Wallet
+          </Button> 
+        </div>
+       
       </motion.section>
-      // <section className={classes.container}>
-      //   <div className={classes.searchSection}>
-      //     <Input
-      //       placeholder="Search wagers"
-      //       onFocus={() => {
-      //         listItemRefs.current?.scrollIntoView({
-      //           behavior: "smooth",
-      //           block: "start",
-      //           inline: "center",
-      //         });
-      //       }}
-      //     />
-      //   </div>
-      //   {/* <ConnectWallet></ConnectWallet> */}
-      
-      //   <Button>
-      //     Connect Wallet
-      //    </Button>
-      // </section>
+ 
     );
   return (
-      <div className="flex select-none flex-wrap items-stretch justify-center gap-4">
-          {/* Disconnect Button */}
+      <div className={classes.container}>
+          <div>
           <Button onClick={() => disconnect?.()}>
                   Disconnect  
           </Button>
-     
+          </div>
       
       </div>
   )

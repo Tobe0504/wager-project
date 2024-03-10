@@ -1,0 +1,20 @@
+.container {
+  border: var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid red;
+  background: transparent;
+  margin: 1rem 0;
+}
+
+.container > span {
+  font-family: Poppins;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
