@@ -1,11 +1,10 @@
 import { useSearchParams } from "react-router-dom";
 import WagerCard from "../../Components/WagerCard/WagerCard";
-import { BN } from '@polkadot/util'
-import {
-  useInkathon,
-} from '@scio-labs/use-inkathon'
+import { BN } from "@polkadot/util";
+import { useInkathon } from "@scio-labs/use-inkathon";
 import { motion } from "framer-motion";
 import classes from "./ListItems.module.css";
+import Loader from "../../Components/Loader/Loader";
 
 const containerVariants = {
   hidden: {
@@ -27,12 +26,34 @@ const workVariants = {
 
 type ListItemsProps = {
   list: any[];
+  loading: boolean;
 };
 
-const ListItems = ({ list }: ListItemsProps) => {
+const ListItems = ({ list, loading }: ListItemsProps) => {
   const [, setSearchParams] = useSearchParams();
   const currentSearchParams = new URLSearchParams(window.location.search);
-  const { api } = useInkathon()
+  const { api } = useInkathon();
+
+  if (loading) {
+    return (
+      <div className={classes.noWager}>
+        <Loader />
+      </div>
+    );
+  }
+
+  if (list && list?.length < 1 && !loading) {
+    return (
+      <motion.div
+        className={classes.noWager}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        No wagers found
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -42,14 +63,15 @@ const ListItems = ({ list }: ListItemsProps) => {
       animate="visible"
     >
       {list?.map((data, i) => {
-        const decimals = api?.registry.chainDecimals?.[0] || 12
-  
-        const bnAmount =  new BN(data.amount.replace(/,/g, '')).div(new BN(10**decimals))
-        const tokenSymbol = api?.registry?.chainTokens?.[0] || 'Unit'
-        const formattedAmount = `${bnAmount} ${tokenSymbol}`
+        const decimals = api?.registry.chainDecimals?.[0] || 12;
+
+        const bnAmount = new BN(data.amount.replace(/,/g, "")).div(
+          new BN(10 ** decimals)
+        );
+        const tokenSymbol = api?.registry?.chainTokens?.[0] || "Unit";
+        const formattedAmount = `${bnAmount} ${tokenSymbol}`;
 
         return (
-         
           <motion.div variants={workVariants} key={i}>
             <WagerCard
               creator={data.creator}

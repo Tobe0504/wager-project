@@ -3,7 +3,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: 2.5rem;
   padding: 2rem;
 }
 
@@ -22,7 +22,7 @@
 .textSection > div > span:nth-child(1),
 .textSection > div > span:nth-child(3) {
   font-family: Poppins;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   line-height: 30px;
   letter-spacing: 0em;
@@ -36,7 +36,7 @@
 
 .textSection > div > span:nth-child(2) {
   font-family: Poppins;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 30px;
   letter-spacing: 0em;

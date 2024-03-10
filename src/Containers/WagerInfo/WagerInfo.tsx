@@ -1,7 +1,5 @@
 import { useContext, useState, useEffect } from "react";
 import {
-  contractQuery,
-  decodeOutput,
   useInkathon,
   useRegisteredContract,
   contractTx,
@@ -9,50 +7,72 @@ import {
 import classes from "./WagerInfo.module.css";
 import { AppContext } from "../../Context/AppContext";
 import wager1 from "../../Assets/Images/wager1.jpg";
+import wager3 from "../../Assets/Images/wager3.jpg";
 import Loader from "../../Components/Loader/Loader";
 import Button from "../../Components/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
-import Error from "../../Components/Error/Error";
+import ErrorNotification from "../../Components/Error/Error";
 import { BN } from "@polkadot/util";
 
 const WagerInfo = () => {
   // Router
-  const { api, activeAccount } = useInkathon();
+  const { api, activeAccount, activeSigner } = useInkathon();
   const { contract } = useRegisteredContract("wagerr");
   const id = new URLSearchParams(window.location.search).get("wager") || "";
-  const { getWager } = useContext(AppContext);
-  const [wager, setWager] = useState({});
+  const { getWager, fetchWagers } = useContext(AppContext);
+  const [wager, setWager] = useState<{
+    creator: string | null;
+    bettor: string | null;
+    name: string | null;
+    terms: string | null;
+    amount: string | null;
+    totalStake: string | null;
+    status: string | null;
+    claimant: string | null;
+    claimed: boolean;
+  }>({
+    creator: null,
+    bettor: null,
+    name: null,
+    terms: null,
+    amount: null,
+    totalStake: null,
+    status: null,
+    claimant: null,
+    claimed: false,
+  });
   const [loading, setLoading] = useState(false);
+  const [claimAccepted, setClaimAccepted] = useState(false);
+  const [claimRejected, setClaimRejected] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
   const [wagerLink, setWagerLink] = useState("");
-  const [error, setError] = useState<{
+  const [message, setMessage] = useState<{
     type: "success" | "error";
-    error: null | string;
+    message: null | string;
   }>({
     type: "success",
-    error: null,
+    message: null,
   });
 
-  const currentSearchParams = new URLSearchParams(window.location.search);
-  const section = currentSearchParams.get("section");
+  const fetchWager = async (id: string) => {
+    setLoading(true);
+    try {
+      const wager: any = await getWager(id);
+      setWager(wager);
+      setWagerLink(`${window.location.origin}?wager=${wager?.id}`);
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!contract || !api) return;
     if (!activeAccount) {
       return;
     }
-    const fetchWager = async (id: string) => {
-      setLoading(true);
-      try {
-        const wager: any = await getWager(id);
-        setWager(wager);
-        setWagerLink(`${window.location.origin}?wager=${wager?.id}`);
-
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
 
     fetchWager(id);
 
@@ -64,15 +84,29 @@ const WagerInfo = () => {
     Reject,
   }
 
+  const formatAmount = (amount: string | null) => {
+    if (!amount) {
+      return;
+    }
+    const decimals = api?.registry.chainDecimals?.[0] || 12;
+
+    const bnAmount = new BN(amount.replace(/,/g, "")).div(
+      new BN(10 ** decimals)
+    );
+    const tokenSymbol = api?.registry?.chainTokens?.[0] || "Unit";
+    const formattedAmount = `${bnAmount} ${tokenSymbol}`;
+    return formattedAmount;
+  };
+
   // claim the win
   const claimWin = async (wager: any) => {
     if (!contract || !api) return;
     if (!activeAccount) {
       return;
     }
-    // setFetchIsLoading(true)
+    setBtnLoading(true);
     try {
-      const result = await contractQuery(
+      const result = await contractTx(
         api,
         activeAccount.address,
         contract,
@@ -80,68 +114,13 @@ const WagerInfo = () => {
         {},
         [wager.id]
       );
-      const { output, isError, decodedOutput } = decodeOutput(
-        result,
-        contract,
-        "claimWin"
-      );
-      if (isError) throw new Error(decodedOutput);
-      return output;
-    } catch (e) {
-      return e;
-    } finally {
-      // setFetchIsLoading(false)
-    }
-  };
+      setBtnLoading(false);
+      setMessage({ type: "success", message: "Claim sent!" });
 
-  // accept or reject claim to the wager
-  const acceptRejectClaim = async (wager: any, action: ClaimAction) => {
-    if (!contract || !api) return;
-    if (!activeAccount) {
-      return;
-    }
-    // setFetchIsLoading(true)
-    try {
-      const result = await contractQuery(
-        api,
-        activeAccount.address,
-        contract,
-        "acceptRejectClaim",
-        {},
-        [wager.id, action]
-      );
-      const { output, isError, decodedOutput } = decodeOutput(
-        result,
-        contract,
-        "acceptRejectClaim"
-      );
-      if (isError) throw new Error(decodedOutput);
-      return output;
-    } catch (e) {
-      return e;
-    } finally {
-      // setFetchIsLoading(false)
-    }
-  };
-
-  const joinWager = async (wager: any) => {
-    setError({ type: "success", error: null });
-    if (!activeAccount || !contract || !activeSigner || !api) {
-      // toast.error('Wallet not connected. Try again…')
-      return;
-    }
-
-    try {
-      const formattedAmount = new BN(wager.amount.replace(/,/g, ""));
-      const result = await contractTx(
-        api,
-        activeAccount.address,
-        contract,
-        "joinWager",
-        { value: formattedAmount },
-        [wager.id]
-      );
-      setError({ type: "error", error: result });
+      setLoading(true);
+      fetchWager(wager.id);
+      setLoading(false);
+      fetchWagers();
       return result;
     } catch (e: any) {
       let message: string;
@@ -156,24 +135,137 @@ const WagerInfo = () => {
           message = "Transaction failed";
           break;
         case "Error":
+          console.log(e);
           message = "Transaction failed";
           break;
         default:
           message = e ? `Transaction failed (${e})` : "Transaction failed";
       }
-      setError({ type: "error", error: message });
+      console.log(message);
+      setMessage({ type: "error", message });
+
+      setBtnLoading(false);
+    } finally {
+      // setFetchIsLoading(false)
+    }
+  };
+
+  // accept or reject claim to the wager
+  const acceptRejectClaim = async (wager: any, action: ClaimAction) => {
+    if (!contract || !api) return;
+    if (!activeAccount) {
+      return;
+    }
+    setBtnLoading(true);
+    try {
+      const result = await contractTx(
+        api,
+        activeAccount.address,
+        contract,
+        "acceptRejectClaim",
+        {},
+        [wager.id, action]
+      );
+      setBtnLoading(false);
+      setMessage({ type: "success", message: `Claim ${action.toString()}ed.` });
+
+      setLoading(true);
+      fetchWager(wager.id);
+      setLoading(false);
+      fetchWagers();
+      return result;
+    } catch (e: any) {
+      let message: string;
+      switch (e.errorMessage) {
+        case "UserCancelled":
+          message = "Transaction cancelled";
+          break;
+        case "TokenBelowMinimum":
+          message = "Insufficient balance to pay for fees";
+          break;
+        case "ExtrinsicFailed":
+          message = "Transaction failed";
+          break;
+        case "Error":
+          console.log(e);
+          message = "Transaction failed";
+          break;
+        default:
+          message = e ? `Transaction failed (${e})` : "Transaction failed";
+      }
+      console.log(message);
+      setMessage({ type: "error", message });
+
+      setBtnLoading(false);
+    } finally {
+      // setFetchIsLoading(false)
+    }
+  };
+
+  // Join Wager
+  const joinWager = async (wager: any) => {
+    if (!activeAccount || !contract || !activeSigner || !api) {
+      // toast.error('Wallet not connected. Try again…')
+      return;
+    }
+    setBtnLoading(true);
+    try {
+      console.log("wager to join", wager);
+      const formattedAmount = new BN(wager.amount.replace(/,/g, ""));
+      const result = await contractTx(
+        api,
+        activeAccount.address,
+        contract,
+        "joinWager",
+        { value: formattedAmount },
+        [wager.id]
+      );
+      setBtnLoading(false);
+      setMessage({ type: "success", message: "Wager joined!" });
+
+      setLoading(true);
+      fetchWager(wager.id);
+      setLoading(false);
+      fetchWagers();
+      return result;
+    } catch (e: any) {
+      let message: string;
+      switch (e.errorMessage) {
+        case "UserCancelled":
+          message = "Transaction cancelled";
+          break;
+        case "TokenBelowMinimum":
+          message = "Insufficient balance to pay for fees";
+          break;
+        case "ExtrinsicFailed":
+          message = "Transaction failed";
+          break;
+        case "Error":
+          console.log(e);
+          message = "Transaction failed";
+          break;
+        default:
+          message = e ? `Transaction failed (${e})` : "Transaction failed";
+      }
+      console.log(message);
+      setMessage({ type: "error", message });
+
+      setBtnLoading(false);
     } finally {
     }
   };
 
   const copyWagerLink = async () => {
-    setError({ type: "success", error: null });
+    setMessage({ type: "success", message: null });
 
     try {
       await navigator.clipboard.writeText(wagerLink);
-      setError({ type: "success", error: "Wager link copied to clipboard" });
+      setMessage({
+        type: "success",
+        message: "Wager link copied to clipboard",
+      });
     } catch (err) {
-      setError({ type: "error", error: "Failed to copy wager link" });
+      setMessage({ type: "error", message: "Failed to copy wager link" });
     }
   };
 
@@ -188,7 +280,11 @@ const WagerInfo = () => {
   return (
     <section className={classes.container}>
       <div className={classes.textSection}>
-        {error?.error && <Error type="success">{error?.error}</Error>}
+        {message?.message && (
+          <ErrorNotification type={message?.type as "success" | "error"}>
+            {message?.message}
+          </ErrorNotification>
+        )}
 
         <div className={classes.imageSection}>
           <img src={wager1} alt="Wager 1" />
@@ -217,16 +313,15 @@ const WagerInfo = () => {
 
         <div>
           <span>Amount:</span>
-          <span>{wager?.amount}</span>
+          <span>{formatAmount(wager?.amount)}</span>
         </div>
 
         <div>
           <span>Total Stake:</span>
-          <span>{wager?.totalStake} ETH</span>
+          <span>{formatAmount(wager?.totalStake)} </span>
         </div>
-
-        {section === "pending-wagers" &&
-          (wager.creator === activeAccount.address ? (
+        {wager.status === "Pending" &&
+          (wager.creator === activeAccount?.address ? (
             <div>
               <Button type="secondary" onClick={copyWagerLink}>
                 <span>Share wager link</span>
@@ -235,7 +330,12 @@ const WagerInfo = () => {
             </div>
           ) : (
             <div>
-              <Button onClick={joinWager} disabled={!activeAccount}>
+              <Button
+                onClick={() => {
+                  joinWager(wager);
+                }}
+                disabled={!activeAccount}
+              >
                 <span>Join wager</span>
               </Button>
               {!activeAccount && (
@@ -246,45 +346,57 @@ const WagerInfo = () => {
             </div>
           ))}
 
-        {section === "active-wagers" &&
-          (wager?.claimant && wager?.claimant !== activeAccount.address ? (
+        {wager.status === "Active" &&
+          (wager.creator === activeAccount?.address ||
+            wager.bettor === activeAccount?.address) && (
             <div>
-              <Button
-                type="primary"
-                onClick={() => {
-                  acceptRejectClaim(activeAccount, ClaimAction.Accept);
-                }}
-              >
-                <span>Accept Claim</span>
-              </Button>
-
-              <Button
-                type="secondary"
-                onClick={() => {
-                  acceptRejectClaim(activeAccount, ClaimAction.Reject);
-                }}
-              >
-                <span>Reject Claim</span>
-              </Button>
+              {wager?.claimant && wager?.claimant !== activeAccount.address ? (
+                <div>
+                  <Button
+                    type="primary"
+                    loading={btnLoading && claimAccepted}
+                    onClick={() => {
+                      acceptRejectClaim(wager, ClaimAction.Accept);
+                      setClaimAccepted(true);
+                      setClaimRejected(false);
+                    }}
+                  >
+                    <span>Accept Claim</span>
+                  </Button>
+                  <div style={{ padding: "4px 0" }}></div>
+                  <Button
+                    type="secondary"
+                    loading={btnLoading && claimRejected}
+                    onClick={() => {
+                      acceptRejectClaim(wager, ClaimAction.Reject);
+                      setClaimRejected(true);
+                      setClaimAccepted(false);
+                    }}
+                  >
+                    <span>Reject Claim</span>
+                  </Button>
+                </div>
+              ) : !wager?.claimed && !wager?.claimant ? (
+                <div>
+                  <Button
+                    type="primary"
+                    loading={btnLoading}
+                    onClick={() => {
+                      claimWin(wager);
+                    }}
+                  >
+                    <span>Claim win</span>
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  <Button type="secondary" disabled>
+                    <span>Waiting</span>
+                  </Button>
+                </div>
+              )}
             </div>
-          ) : !wager?.claimed && !wager?.claimant ? (
-            <div>
-              <Button
-                type="primary"
-                onClick={() => {
-                  claimWin(activeAccount);
-                }}
-              >
-                <span>Claim win</span>
-              </Button>
-            </div>
-          ) : (
-            <div>
-              <Button type="secondary">
-                <span>Waiting</span>
-              </Button>
-            </div>
-          ))}
+          )}
       </div>
     </section>
   );

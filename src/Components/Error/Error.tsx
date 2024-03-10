@@ -13,7 +13,7 @@ type ErrorProps = {
   notShowIndicator?: boolean;
 };
 
-const Error = ({ children, type, notShowIndicator }: ErrorProps) => {
+const ErrorNotification = ({ children, type, notShowIndicator }: ErrorProps) => {
   return (
     <motion.div
       className={classes.container}
@@ -49,4 +49,4 @@ const Error = ({ children, type, notShowIndicator }: ErrorProps) => {
   );
 };
 
-export default Error;
+export default ErrorNotification;

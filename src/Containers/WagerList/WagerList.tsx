@@ -11,7 +11,7 @@ import { AppContext } from "../../Context/AppContext";
 
 const WagerList = () => {
   // Context
-  const { listItemRefs, pendingWagers, activeWagers, fetchWagers } =
+  const { listItemRefs, pendingWagers, activeWagers, fetchWagers, isLoading } =
     useContext(AppContext);
 
   const { api, activeAccount } = useInkathon();
@@ -57,16 +57,16 @@ const WagerList = () => {
             setSearchParams(currentSearchParams.toString());
           }}
           body={<WagerInfo />}
-          style={{ overflowY: "auto", minHeight: "80vh" }}
+          style={{ overflowY: "auto", minHeight: "95vh" }}
         />
       )}
       <SectionHeader title="Wagers" paragraph="Dive into the Thrill" />
       <div className={classes.list} ref={listItemRefs}>
         <SectionsNav navItems={navItems} setNavItems={setNavItems} isRouting />
         {section === "active-wagers" ? (
-          <ListItems list={activeWagers} />
+          <ListItems list={activeWagers} loading={isLoading} />
         ) : (
-          <ListItems list={pendingWagers} />
+          <ListItems list={pendingWagers} loading={isLoading} />
         )}
       </div>
     </section>

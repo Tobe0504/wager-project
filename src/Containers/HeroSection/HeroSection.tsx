@@ -67,8 +67,8 @@ const HeroSection = () => {
       )}
 
       <motion.div className={classes.textSection} variants={containerVaraiants}>
-        <h4>Bet Beyond Limits with Web3 Wagering</h4>
-        <p>Unlock the future of thrilling bets on the blockchain</p>
+        <h4>Peer-to-Peer Social Betting on Polkadot</h4>
+        <p>Wager against friends or anyone, on anything, on the blockchain.</p>
         <div className={classes.buttonSection}>
           {!activeAccount ?   <Button
             onClick={() => {
